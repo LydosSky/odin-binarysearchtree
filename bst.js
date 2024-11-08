@@ -144,6 +144,7 @@ function Tree(array) {
 
     helper(root);
   }
+
   // Traverses the tree and call callback
   // on each node
   function postOrder(callback) {
@@ -164,13 +165,28 @@ function Tree(array) {
   // Returns the height of the given node
   function height(node) {
     if (node === null) return 0;
-    const leftHeight = height(node.left);
-    const rightHeight = height(node.right);
-
-    return Math.max(leftHeight, rightHeight) + 1;
+    return Math.max(height(node.left), height(node.right)) + 1;
   }
 
-  function depth(node) {}
+  // Returns the depth of given node or null
+  function depth(node) {
+    function helper(node, value) {
+      if (node === null) return -1;
+      let edges = -1;
+      if (
+        node.data === value ||
+        (edges = helper(node.left, value)) >= 0 ||
+        (edges = helper(node.right, value)) >= 0
+      ) {
+        return edges + 1;
+      }
+
+      return edges;
+    }
+    const depthValue = helper(root, node.data);
+    return depthValue < 0 ? null : depthValue;
+  }
+
   function isBalanced() {}
   function rebalance() {}
 
