@@ -21,7 +21,17 @@ function Tree(array) {
     );
   }
 
-  function insert(value) {}
+  function insert(value) {
+    function helper(node) {
+      if (node === null) return new Node(value, null, null);
+      if (node.data > value) node.left = helper(node.left);
+      if (node.data < value) node.right = helper(node.right);
+      return node;
+    }
+
+    helper(root);
+  }
+
   function deleteItem(value) {}
 
   // Searches for value inside the tree
