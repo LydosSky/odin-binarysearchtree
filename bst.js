@@ -3,7 +3,7 @@ function Node(data, left, right) {
 }
 
 function Tree(array) {
-  const root = buildTree(array);
+  let root = buildTree(array);
 
   function buildTree(array) {
     if (array.length === 1) return new Node(array[0], null, null);
@@ -141,7 +141,6 @@ function Tree(array) {
       helper(node.left);
       helper(node.right);
     }
-
     helper(root);
   }
 
@@ -187,11 +186,34 @@ function Tree(array) {
     return depthValue < 0 ? null : depthValue;
   }
 
-  function isBalanced() {}
-  function rebalance() {}
+  // Check whether tree is balanced or not
+  function isBalanced() {
+    function helper(node) {
+      if (node === null) return true;
+      if (Math.abs(height(node.left) - height(node.right)) > 1) return false;
+      return helper(node.left) || helper(node.right);
+    }
+
+    return helper(root);
+  }
+
+  // Rebalance tree after inserting new
+  // item
+  function rebalance() {
+    const newArray = [];
+    function callback(node) {
+      newArray.push(node.data);
+    }
+    inOrder(callback);
+    root = buildTree(newArray);
+  }
+
+  function getRoot() {
+    return root;
+  }
 
   return {
-    root,
+    getRoot,
     insert,
     deleteItem,
     find,
