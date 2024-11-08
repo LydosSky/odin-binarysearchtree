@@ -37,7 +37,40 @@ function Tree(array) {
     return helper(root);
   }
 
-  function levelOrder(callback) {}
+  // Recursive level order traversal
+  function levelOrder(callback) {
+    if (callback === undefined) {
+      throw new Error("Callback is required");
+    }
+    function helper(node, level) {
+      if (node === null) return;
+      if (level === 1) callback(node);
+      helper(node.left, level - 1);
+      helper(node.right, level - 1);
+    }
+
+    let level = height(root);
+    for (let i = 1; i < level + 1; i++) {
+      helper(root, i);
+    }
+  }
+
+  function levelOrderIterative(callback) {
+    if (callback === undefined) {
+      throw new Error("Callback is required");
+    }
+
+    const queue = [];
+    queue.push(root);
+
+    while (queue.length !== 0) {
+      let node = queue.shift();
+      callback(node);
+      if (node.left !== null) queue.push(node.left);
+      if (node.right !== null) queue.push(node.right);
+    }
+  }
+
   // Traverses the tree and call callback
   // on each node
   function inOrder(callback) {
@@ -54,9 +87,49 @@ function Tree(array) {
 
     helper(root);
   }
-  function preOrder(callback) {}
-  function postOrder(callback) {}
-  function height(node) {}
+
+  // Traverses the tree and call callback
+  // on each node
+  function preOrder(callback) {
+    if (callback === undefined) {
+      throw new Error("Callback is required");
+    }
+
+    function helper(node) {
+      if (node === null) return;
+      callback(node);
+      helper(node.left);
+      helper(node.right);
+    }
+
+    helper(root);
+  }
+  // Traverses the tree and call callback
+  // on each node
+  function postOrder(callback) {
+    if (callback === undefined) {
+      throw new Error("Callback is required");
+    }
+
+    function helper(node) {
+      if (node === null) return;
+      helper(node.left);
+      helper(node.right);
+      callback(node);
+    }
+
+    helper(root);
+  }
+
+  // Returns the height of the given node
+  function height(node) {
+    if (node === null) return 0;
+    const leftHeight = height(node.left);
+    const rightHeight = height(node.right);
+
+    return Math.max(leftHeight, rightHeight) + 1;
+  }
+
   function depth(node) {}
   function isBalanced() {}
   function rebalance() {}
@@ -67,6 +140,7 @@ function Tree(array) {
     deleteItem,
     find,
     levelOrder,
+    levelOrderIterative,
     inOrder,
     preOrder,
     postOrder,
