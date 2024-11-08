@@ -21,6 +21,7 @@ function Tree(array) {
     );
   }
 
+  // Insert value into its position in the tree
   function insert(value) {
     function helper(node) {
       if (node === null) return new Node(value, null, null);
@@ -32,7 +33,36 @@ function Tree(array) {
     helper(root);
   }
 
-  function deleteItem(value) {}
+  // Returns node with minimum value in subtree
+  function minValueChild(node) {
+    if (node.left === null) return node;
+    return minValueChild(node.left);
+  }
+
+  // Delete value from the tree
+  function deleteItem(value) {
+    function helper(node, value) {
+      if (node === null) return null;
+      if (value < node.data) node.left = helper(node.left, value);
+      else if (value > node.data) node.right = helper(node.right, value);
+      else {
+        // Case where node has no children
+        if (node.left === null && node.right === null) return null;
+        // Case where node has only one child
+        else if (node.left === null) return node.right;
+        else if (node.right === null) return node.left;
+        // Case where node has two children
+        else {
+          let successor = minValueChild(node.right);
+          node.data = successor.data;
+          node.right = helper(node.right, successor.data);
+        }
+      }
+      return node;
+    }
+
+    helper(root, value);
+  }
 
   // Searches for value inside the tree
   // if it not exist returns null
